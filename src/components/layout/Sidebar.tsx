@@ -24,7 +24,7 @@ export default function SidebarNavigation() {
     { id: "tvseries", label: "TV Series", icon: Tv, path: "/tvseries" },
     { id: "episodes", label: "Episodes", icon: PlaySquare, path: "/episodes" },
     { id: "cast", label: "Cast", icon: Users, path: "/cast" },
-    { id: "genre", label: "Genre", icon: Layers, path: "/genre" },
+    { id: "genre", label: "Genre", icon: Layers, path: "/genres" },
 
     { id: "general", label: "GENERAL", isHeader: true },
     { id: "subscription", label: "Subscription", icon: CreditCard, path: "/subscription" },
