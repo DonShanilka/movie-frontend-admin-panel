@@ -32,7 +32,7 @@ export default function SidebarNavigation() {
   ];
 
   return (
-    <div className="w-[280px] min-h-screen bg-gray-900 text-white fixed left-0 top-0 bottom-0 shadow-lg flex flex-col justify-between">
+    <div className="w-[280px] min-h-screen bg-gray-950 text-white fixed left-0 top-0 bottom-0 shadow-lg flex flex-col justify-between">
       {/* Logo Section */}
       <div>
         <div className="h-16 flex items-center justify-center border-b border-gray-700">
