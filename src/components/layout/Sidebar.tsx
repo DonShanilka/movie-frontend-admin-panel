@@ -36,7 +36,7 @@ export default function SidebarNavigation() {
       {/* Logo Section */}
       <div>
         <div className="h-16 flex items-center justify-center border-b border-gray-700">
-          <Sparkles className="mr-2 text-emerald-400" />
+          <Sparkles className="mr-2 text-yellow-300" />
           <span className="font-bold text-lg">MovieApp</span>
         </div>
 
@@ -48,7 +48,7 @@ export default function SidebarNavigation() {
                 return (
                   <li
                     key={item.id}
-                    className="text-xs font-semibold text-emerald-400 uppercase mt-4 mb-2"
+                    className="text-xs font-semibold text-yellow-300 uppercase mt-4 mb-2"
                   >
                     {item.label}
                   </li>
@@ -63,7 +63,7 @@ export default function SidebarNavigation() {
                     onClick={() => router.push(item.path)}
                     className={`flex w-full items-center gap-3 p-3 rounded-md text-sm transition ${
                       isActive
-                        ? "bg-emerald-600 text-white shadow-md"
+                        ? "bg-yellow-300 text-black font-bold shadow-md"
                         : "text-gray-300 hover:bg-gray-800 hover:text-white"
                     }`}
                   >
