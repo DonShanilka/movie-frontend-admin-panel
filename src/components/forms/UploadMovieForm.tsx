@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import Input from "../UI/Input";
+import FileInput from "../UI/FileInput";
 
 export default function UploadMovieForm() {
   const [formData, setFormData] = useState({
@@ -109,29 +111,6 @@ export default function UploadMovieForm() {
   );
 }
 
-/* ---------- Reusable Inputs ---------- */
 
-function Input({ label, ...props }: any) {
-  return (
-    <div>
-      <label className="text-xs text-gray-400">{label}</label>
-      <input
-        {...props}
-        className="w-full mt-1 px-2 py-1.5 rounded bg-gray-800 outline-none text-sm"
-      />
-    </div>
-  );
-}
 
-function FileInput({ label, onChange }: any) {
-  return (
-    <div>
-      <label className="text-xs text-gray-400">{label}</label>
-      <input
-        type="file"
-        onChange={onChange}
-        className="w-full mt-1 text-sm"
-      />
-    </div>
-  );
-}
+

@@ -60,7 +60,7 @@ export default function SidebarNavigation() {
               return (
                 <li key={item.id}>
                   <button
-                    onClick={() => router.push(item.path)}
+                    onClick={() => router.push(item.path ? item.path : "/")}
                     className={`flex w-full items-center gap-3 p-3 rounded-md text-sm transition ${
                       isActive
                         ? "bg-yellow-300 text-black font-bold shadow-md"
