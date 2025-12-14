@@ -3,23 +3,48 @@
 import { useState } from "react";
 import Input from "../UI/Input";
 import FileInput from "../UI/FileInput";
+import Select from "../UI/Select";
+import CountrySelect from "../UI/CountrySelect";
+import SaveButton from "../UI/SaveButton";
+import LanguageSelect from "../UI/LanguageSelect";
 
 export default function UploadMovieForm() {
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    releaseYear: "",
-    language: "",
-    duration: "",
-    rating: "",
-    ageRating: "",
-    country: "",
-    movieURL: "",
-  });
 
+  const [fileKey, setFileKey] = useState(0);
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [banner, setBanner] = useState<File | null>(null);
   const [trailer, setTrailer] = useState<File | null>(null);
+  const [movieFile, setMovieFile] = useState<File | null>(null);
+
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    release_year: "",
+    language: "",
+    duration: "",
+    rating: "",
+    age_rating: "",
+    country: "",
+    movie: "",
+    thumbnail: "",
+    banner: "",
+    trailer: "",
+  });
+
+  const initialFormData = {
+    title: "",
+    description: "",
+    release_year: "",
+    language: "",
+    duration: "",
+    rating: "",
+    age_rating: "",
+    country: "",
+    movie: "",
+    thumbnail: "",
+    banner: "",
+    trailer: "",
+  };
 
   const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -34,13 +59,32 @@ export default function UploadMovieForm() {
     if (thumbnail) data.append("thumbnail", thumbnail);
     if (banner) data.append("banner", banner);
     if (trailer) data.append("trailer", trailer);
+    if (movieFile) data.append("movie", movieFile);
 
-    const res = await fetch("http://localhost:8080/api/movies", {
+    const res = await fetch("http://localhost:8080/api/movies/upload", {
       method: "POST",
       body: data,
     });
 
+    console.log(formData);
+
     res.ok ? alert("Movie saved!") : alert("Failed to save");
+    if (res.ok) {
+  alert("Movie saved!");
+
+  // ✅ Reset text fields
+  setFormData(initialFormData);
+
+  // ✅ Reset file states
+  setMovieFile(null);
+  setThumbnail(null);
+  setBanner(null);
+  setTrailer(null);
+
+  // ✅ Optional: reset file inputs visually
+  setFileKey((prev) => prev + 1);
+}
+
   };
 
   return (
@@ -52,31 +96,65 @@ export default function UploadMovieForm() {
 
       {/* Basic Info */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Input label="Title" name="title" value={formData.title} onChange={handleChange} />
-        <Input label="Release Year" name="releaseYear" type="number" value={formData.releaseYear} onChange={handleChange} />
-        <Input label="Language" name="language" value={formData.language} onChange={handleChange} />
+        <Input
+          label="Title"
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+        />
+        <Input
+          label="Release Year"
+          name="releaseYear"
+          type="number"
+          value={formData.release_year}
+          onChange={handleChange}
+        />
 
-        <Input label="Duration (min)" name="duration" type="number" value={formData.duration} onChange={handleChange} />
-        <Input label="Rating" name="rating" value={formData.rating} onChange={handleChange} />
+        <LanguageSelect
+          label="Language"
+          value={formData.language}
+          onChange={(value) => setFormData({ ...formData, language: value })}
+        />
+
+        <Input
+          label="Duration (min)"
+          name="duration"
+          type="number"
+          value={formData.duration}
+          onChange={handleChange}
+        />
+        <Input
+          label="Rating"
+          name="rating"
+          value={formData.rating}
+          onChange={handleChange}
+        />
 
         <div>
-          <label className="text-xs text-gray-400">Age Rating</label>
-          <select
-            name="ageRating"
-            value={formData.ageRating}
+          <Select
+            label="Age Rating"
+            name="age_rating"
+            value={formData.age_rating}
             onChange={handleChange}
-            className="w-full mt-1 px-2 py-1.5 rounded bg-gray-800 outline-none text-sm"
-          >
-            <option value="">Select</option>
-            <option value="PG">PG</option>
-            <option value="PG-13">PG-13</option>
-            <option value="16+">16+</option>
-            <option value="18+">18+</option>
-          </select>
+            options={[
+              { label: "PG", value: "PG" },
+              { label: "PG-13", value: "PG-13" },
+              { label: "16+", value: "16+" },
+              { label: "18+", value: "18+" },
+            ]}
+          />
         </div>
 
-        <Input label="Country" name="country" value={formData.country} onChange={handleChange} />
-        <Input label="Movie URL" name="movieURL" value={formData.movieURL} onChange={handleChange} />
+        <CountrySelect
+          label="Country"
+          value={formData.country}
+          onChange={(value) => setFormData({ ...formData, country: value })}
+        />
+
+        <FileInput
+          label="Movie File"
+          onChange={(e: any) => setMovieFile(e.target.files?.[0] || null)}
+        />
       </div>
 
       {/* Description */}
@@ -93,24 +171,26 @@ export default function UploadMovieForm() {
 
       {/* Media */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FileInput label="Thumbnail" onChange={(e:any) => setThumbnail(e.target.files?.[0] || null)} />
-        <FileInput label="Banner" onChange={(e:any) => setBanner(e.target.files?.[0] || null)} />
+        <FileInput
+          label="Thumbnail"
+          onChange={(e: any) => setThumbnail(e.target.files?.[0] || null)}
+        />
+        <FileInput
+          label="Banner"
+          onChange={(e: any) => setBanner(e.target.files?.[0] || null)}
+        />
         <div className="md:col-span-2">
-          <FileInput label="Trailer (video)" onChange={(e:any) => setTrailer(e.target.files?.[0] || null)} />
+          <FileInput
+            label="Trailer (video)"
+            onChange={(e: any) => setTrailer(e.target.files?.[0] || null)}
+          />
         </div>
       </div>
 
       {/* Submit */}
-      <button
-        type="submit"
-        className="bg-yellow-300 hover:bg-yellow-400 py-2 rounded-lg font-semibold text-black w-full text-sm"
-      >
+      <SaveButton type="submit" fullWidth>
         Save Movie
-      </button>
+      </SaveButton>
     </form>
   );
 }
-
-
-
-
