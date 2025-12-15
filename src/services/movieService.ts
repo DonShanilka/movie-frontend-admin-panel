@@ -1,4 +1,4 @@
-import { Movie } from "../Models/Movie";
+import { Movie } from "../models/Movie";
 
 export const MovieService = {
   async uploadMovie(movieData: Movie) {

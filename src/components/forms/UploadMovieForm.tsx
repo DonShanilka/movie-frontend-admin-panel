@@ -1,35 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store/store";
+import { uploadMovie, resetMovieState } from "../../redux/slices/movieSlice";
 import Input from "../UI/Input";
-import FileInput from "../UI/FileInput";
 import Select from "../UI/Select";
-import CountrySelect from "../UI/CountrySelect";
-import SaveButton from "../UI/SaveButton";
 import LanguageSelect from "../UI/LanguageSelect";
+import CountrySelect from "../UI/CountrySelect";
+import FileInput from "../UI/FileInput";
+import SaveButton from "../UI/SaveButton";
+import { Movie } from "../../models/Movie";
+// import DateInput from "../UI/DateInput";
+
 
 export default function UploadMovieForm() {
-
+  const dispatch = useDispatch<AppDispatch>();
   const [fileKey, setFileKey] = useState(0);
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [banner, setBanner] = useState<File | null>(null);
   const [trailer, setTrailer] = useState<File | null>(null);
   const [movieFile, setMovieFile] = useState<File | null>(null);
+//   const [releaseYear, setReleaseYear] = useState<Date | null>(null);
 
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    release_year: "",
-    language: "",
-    duration: "",
-    rating: "",
-    age_rating: "",
-    country: "",
-    movie: "",
-    thumbnail: "",
-    banner: "",
-    trailer: "",
-  });
+  const { loading, error, success } = useSelector(
+    (state: RootState) => state.movies
+  );
 
   const initialFormData = {
     title: "",
@@ -45,52 +41,49 @@ export default function UploadMovieForm() {
     banner: "",
     trailer: "",
   };
+  const [formData, setFormData] = useState(initialFormData);
 
   const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
 
-    const data = new FormData();
-    Object.entries(formData).forEach(([k, v]) => data.append(k, v));
-
-    if (thumbnail) data.append("thumbnail", thumbnail);
-    if (banner) data.append("banner", banner);
-    if (trailer) data.append("trailer", trailer);
-    if (movieFile) data.append("movie", movieFile);
-
-    const res = await fetch("http://localhost:8080/api/movies/upload", {
-      method: "POST",
-      body: data,
+    const movie = new Movie({
+      ...formData,
+      movie: movieFile,
+      thumbnail: thumbnail,
+      banner: banner,
+      trailer: trailer,
     });
 
-    console.log(formData);
-
-    res.ok ? alert("Movie saved!") : alert("Failed to save");
-    if (res.ok) {
-  alert("Movie saved!");
-
-  // ✅ Reset text fields
-  setFormData(initialFormData);
-
-  // ✅ Reset file states
-  setMovieFile(null);
-  setThumbnail(null);
-  setBanner(null);
-  setTrailer(null);
-
-  // ✅ Optional: reset file inputs visually
-  setFileKey((prev) => prev + 1);
-}
-
+    dispatch(uploadMovie(movie));
   };
+
+  useEffect(() => {
+    if (success) {
+      alert("Movie saved!");
+      setFormData(initialFormData);
+      setMovieFile(null);
+      setThumbnail(null);
+      setBanner(null);
+      setTrailer(null);
+    //   setFileKey((prev) => prev + 1);
+      dispatch(resetMovieState());
+    }
+
+    if (error) {
+      alert(error);
+      dispatch(resetMovieState());
+    }
+  }, [success, error, dispatch]);
 
   return (
     <form
       onSubmit={handleSubmit}
       className="bg-gray-900 text-white p-4 rounded-xl space-y-4 max-w-4xl"
+      key={fileKey}
     >
       <h2 className="text-lg font-bold">Add New Movie</h2>
 
@@ -104,18 +97,16 @@ export default function UploadMovieForm() {
         />
         <Input
           label="Release Year"
-          name="releaseYear"
+          name="release_year"
           type="number"
           value={formData.release_year}
           onChange={handleChange}
         />
-
         <LanguageSelect
           label="Language"
           value={formData.language}
           onChange={(value) => setFormData({ ...formData, language: value })}
         />
-
         <Input
           label="Duration (min)"
           name="duration"
@@ -129,28 +120,23 @@ export default function UploadMovieForm() {
           value={formData.rating}
           onChange={handleChange}
         />
-
-        <div>
-          <Select
-            label="Age Rating"
-            name="age_rating"
-            value={formData.age_rating}
-            onChange={handleChange}
-            options={[
-              { label: "PG", value: "PG" },
-              { label: "PG-13", value: "PG-13" },
-              { label: "16+", value: "16+" },
-              { label: "18+", value: "18+" },
-            ]}
-          />
-        </div>
-
+        <Select
+          label="Age Rating"
+          name="age_rating"
+          value={formData.age_rating}
+          onChange={handleChange}
+          options={[
+            { label: "PG", value: "PG" },
+            { label: "PG-13", value: "PG-13" },
+            { label: "16+", value: "16+" },
+            { label: "18+", value: "18+" },
+          ]}
+        />
         <CountrySelect
           label="Country"
           value={formData.country}
           onChange={(value) => setFormData({ ...formData, country: value })}
         />
-
         <FileInput
           label="Movie File"
           onChange={(e: any) => setMovieFile(e.target.files?.[0] || null)}
@@ -188,8 +174,8 @@ export default function UploadMovieForm() {
       </div>
 
       {/* Submit */}
-      <SaveButton type="submit" fullWidth>
-        Save Movie
+      <SaveButton type="submit" fullWidth disabled={loading}>
+        {loading ? "Saving..." : "Save Movie"}
       </SaveButton>
     </form>
   );
