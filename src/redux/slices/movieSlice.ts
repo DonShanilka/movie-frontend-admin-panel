@@ -2,17 +2,20 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Movie } from "../../models/Movie";
 import { MovieService } from "../../services/movieService";
+import { MovieTypes } from "@/types/movieTypes";
 
 interface MovieState {
+  movies: MovieTypes[];
   loading: boolean;
   error: string | null;
   success: boolean;
 }
 
 const initialState: MovieState = {
-  loading: false,
-  error: null,
-  success: false,
+    movies: [],
+    loading: false,
+    error: null,
+    success: false,
 };
 
 // Thunk to upload movie
@@ -27,6 +30,24 @@ export const uploadMovie = createAsyncThunk(
     }
   }
 );
+
+// Thunk to fetch all movies
+export const getAllMovies = createAsyncThunk<
+  MovieTypes[],
+  void,
+  { rejectValue: string }
+>(
+  "movies/getAllMovies",
+  async (_, { rejectWithValue }) => {
+    try {
+      const data = await MovieService.getAllMovies();
+      return data;
+    } catch (err: any) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
 
 const movieSlice = createSlice({
   name: "movies",

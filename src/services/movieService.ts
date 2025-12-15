@@ -4,6 +4,7 @@ import { MovieTypes } from "@/types/movieTypes";
 const API_URL = "http://localhost:8080/api/movies";
 
 export const MovieService = {
+    // Upload movie
   async uploadMovie(movieData: Movie): Promise<any> {
     const formData = new FormData();
 
@@ -19,10 +20,8 @@ export const MovieService = {
     if (!res.ok) throw new Error("Failed to upload movie");
     return res.json();
   },
-};
 
-
-export const movieService = {
+    // Get all movies
   async getAllMovies(): Promise<MovieTypes[]> {
     const res = await fetch(API_URL, {
       method: "GET",
