@@ -39,9 +39,9 @@ export default function MovieList() {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto overflow-x-auto max-h-[70vh] overflow-y-auto">
         <table className="w-full">
-          <thead>
+          <thead className="">
             <tr className="bg-black border-b border-gray-800">
               <th className="px-6 py-4 text-left">
                 <div className="flex items-center gap-2">
