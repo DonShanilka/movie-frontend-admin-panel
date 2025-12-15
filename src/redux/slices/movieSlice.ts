@@ -12,10 +12,10 @@ interface MovieState {
 }
 
 const initialState: MovieState = {
-    movies: [],
-    loading: false,
-    error: null,
-    success: false,
+  movies: [],
+  loading: false,
+  error: null,
+  success: false,
 };
 
 // Thunk to upload movie
@@ -36,18 +36,15 @@ export const getAllMovies = createAsyncThunk<
   MovieTypes[],
   void,
   { rejectValue: string }
->(
-  "movies/getAllMovies",
-  async (_, { rejectWithValue }) => {
-    try {
-      const data = await MovieService.getAllMovies();
-      return data;
-    } catch (err: any) {
-      return rejectWithValue(err.message);
-    }
+>("movies/getAllMovies", async (_, { rejectWithValue }) => {
+  try {
+    const data = await MovieService.getAllMovies();
+    console.log("Fetched movies:", data);
+    return data;
+  } catch (err: any) {
+    return rejectWithValue(err.message);
   }
-);
-
+});
 
 const movieSlice = createSlice({
   name: "movies",
@@ -71,6 +68,20 @@ const movieSlice = createSlice({
         state.success = true;
       })
       .addCase(uploadMovie.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
+
+    builder
+      .addCase(getAllMovies.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAllMovies.fulfilled, (state, action) => {
+        state.loading = false;
+        state.movies = action.payload;
+      })
+      .addCase(getAllMovies.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

@@ -1,7 +1,7 @@
 import  {Movie}  from "../models/Movie";
 import { MovieTypes } from "@/types/movieTypes";
 
-const API_URL = "http://localhost:8080/api/movies";
+const API_URL = "http://localhost:8080/api/movies/getAllMovies";
 
 export const MovieService = {
     // Upload movie
