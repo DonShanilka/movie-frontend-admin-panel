@@ -1,7 +1,10 @@
-import { Movie } from "../models/Movie";
+import  {Movie}  from "../models/Movie";
+import { MovieTypes } from "@/types/movieTypes";
+
+const API_URL = "http://localhost:8080/api/movies";
 
 export const MovieService = {
-  async uploadMovie(movieData: Movie) {
+  async uploadMovie(movieData: Movie): Promise<any> {
     const formData = new FormData();
 
     Object.entries(movieData).forEach(([key, value]) => {
@@ -14,6 +17,22 @@ export const MovieService = {
     });
 
     if (!res.ok) throw new Error("Failed to upload movie");
+    return res.json();
+  },
+};
+
+
+export const movieService = {
+  async getAllMovies(): Promise<MovieTypes[]> {
+    const res = await fetch(API_URL, {
+      method: "GET",
+      cache: "no-store",
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch movies");
+    }
+
     return res.json();
   },
 };
