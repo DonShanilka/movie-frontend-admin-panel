@@ -21,9 +21,9 @@ const initialState: MovieState = {
   success: false,
 };
 
-// Thunk to upload movie
-export const uploadMovie = createAsyncThunk(
-  "movies/uploadMovie",
+// Thunk to create movie
+export const createMovie = createAsyncThunk(
+  "movies/createMovie",
   async (movie: Movie, { rejectWithValue }) => {
     try {
       const data = await MovieService.uploadMovie(movie);
@@ -76,16 +76,16 @@ const movieSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(uploadMovie.pending, (state) => {
+      .addCase(createMovie.pending, (state) => {
         state.loading = true;
         state.error = null;
         state.success = false;
       })
-      .addCase(uploadMovie.fulfilled, (state) => {
+      .addCase(createMovie.fulfilled, (state) => {
         state.loading = false;
         state.success = true;
       })
-      .addCase(uploadMovie.rejected, (state, action) => {
+      .addCase(createMovie.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

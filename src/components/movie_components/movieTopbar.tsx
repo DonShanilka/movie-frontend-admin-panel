@@ -2,7 +2,7 @@
 
 import { Search, Filter, Upload } from "lucide-react";
 import Modal from "../UI/Modal";
-import MovieForm from "./UploadMovieForm";
+import MovieForm from "./MovieForm";
 import { useState } from "react";
 
 export default function MovieTopbar() {

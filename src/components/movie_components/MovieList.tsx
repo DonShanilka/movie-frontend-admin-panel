@@ -5,8 +5,9 @@ import { Pencil, Trash2 } from "lucide-react";
 import { getAllMovies } from "@/redux/slices/movieSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { MovieTypes } from "@/types/movieTypes";
-import UpdateMovieForm from "./UpdateMovieForm"; // your form component
 import Modal from "../UI/Modal";
+import { Movie } from "@/models/Movie";
+import MovieForm from "./MovieForm";
 
 export default function MovieList() {
   const dispatch = useAppDispatch();
@@ -130,7 +131,7 @@ export default function MovieList() {
       </div>
 
       <Modal open={isOpen} onClose={closeUpdateModal}>
-        <UpdateMovieForm movie={selectedMovie} onClose={closeUpdateModal} />
+        <MovieForm movie={selectedMovie as Movie} onClose={closeUpdateModal} />
       </Modal>
     </div>
   );
