@@ -3,7 +3,11 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store/store";
-import { createMovie, updateMovie, resetMovieState } from "../../redux/slices/movieSlice";
+import {
+  createMovie,
+  updateMovie,
+  resetMovieState,
+} from "../../redux/slices/movieSlice";
 import Input from "../UI/Input";
 import Select from "../UI/Select";
 import LanguageSelect from "../UI/LanguageSelect";
@@ -19,7 +23,9 @@ interface Props {
 
 export default function MovieForm({ movie, onClose }: Props) {
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, error, success } = useSelector((state: RootState) => state.movies);
+  const { loading, error, success } = useSelector(
+    (state: RootState) => state.movies
+  );
 
   // Initialize formData either with movie data (update) or empty (create)
   const initialFormData = {
@@ -106,15 +112,43 @@ export default function MovieForm({ movie, onClose }: Props) {
       onSubmit={handleSubmit}
       className="bg-gray-900 text-white p-6 rounded-xl max-w-4xl mx-auto space-y-6"
     >
-      <h2 className="text-2xl font-bold">{movie?.id ? "Update Movie" : "Add New Movie"}</h2>
+      <h2 className="text-2xl font-bold">
+        {movie?.id ? "Update Movie" : "Add New Movie"}
+      </h2>
 
       {/* Text Inputs */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Input label="Title" name="title" value={formData.title} onChange={handleChange} />
-        <Input label="Release Year" name="release_year" type="number" value={formData.release_year} onChange={handleChange} />
-        <LanguageSelect label="Language" value={formData.language} onChange={(value) => setFormData({ ...formData, language: value })} />
-        <Input label="Duration (min)" name="duration" type="number" value={formData.duration} onChange={handleChange} />
-        <Input label="Rating" name="rating" value={formData.rating} onChange={handleChange} />
+        <Input
+          label="Title"
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+        />
+        <Input
+          label="Release Year"
+          name="release_year"
+          type="number"
+          value={formData.release_year}
+          onChange={handleChange}
+        />
+        <LanguageSelect
+          label="Language"
+          value={formData.language}
+          onChange={(value) => setFormData({ ...formData, language: value })}
+        />
+        <Input
+          label="Duration (min)"
+          name="duration"
+          type="number"
+          value={formData.duration}
+          onChange={handleChange}
+        />
+        <Input
+          label="Rating"
+          name="rating"
+          value={formData.rating}
+          onChange={handleChange}
+        />
         <Select
           label="Age Rating"
           name="age_rating"
@@ -127,8 +161,15 @@ export default function MovieForm({ movie, onClose }: Props) {
             { label: "18+", value: "18+" },
           ]}
         />
-        <CountrySelect label="Country" value={formData.country} onChange={(value) => setFormData({ ...formData, country: value })} />
-        <FileInput label="Movie File" onChange={(e: any) => setMovieFile(e.target.files?.[0] || null)} />
+        <CountrySelect
+          label="Country"
+          value={formData.country}
+          onChange={(value) => setFormData({ ...formData, country: value })}
+        />
+        <FileInput
+          label="Movie File"
+          onChange={(e: any) => setMovieFile(e.target.files?.[0] || null)}
+        />
       </div>
 
       {/* Description */}
@@ -145,14 +186,29 @@ export default function MovieForm({ movie, onClose }: Props) {
 
       {/* Media Files */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FileInput label="Thumbnail" onChange={(e: any) => setThumbnail(e.target.files?.[0] || null)} />
-        <FileInput label="Banner" onChange={(e: any) => setBanner(e.target.files?.[0] || null)} />
-        <FileInput label="Trailer" onChange={(e: any) => setTrailer(e.target.files?.[0] || null)} />
+        <FileInput
+          label="Thumbnail"
+          onChange={(e: any) => setThumbnail(e.target.files?.[0] || null)}
+        />
+        <FileInput
+          label="Banner"
+          onChange={(e: any) => setBanner(e.target.files?.[0] || null)}
+        />
+        <FileInput
+          label="Trailer"
+          onChange={(e: any) => setTrailer(e.target.files?.[0] || null)}
+        />
       </div>
 
       {/* Submit */}
       <SaveButton type="submit" fullWidth disabled={loading}>
-        {loading ? (movie?.id ? "Updating..." : "Saving...") : movie?.id ? "Update Movie" : "Save Movie"}
+        {loading
+          ? movie?.id
+            ? "Updating..."
+            : "Saving..."
+          : movie?.id
+          ? "Update Movie"
+          : "Save Movie"}
       </SaveButton>
     </form>
   );
