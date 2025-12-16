@@ -12,7 +12,7 @@ export const MovieService = {
       if (value) formData.append(key, value as any);
     });
 
-    const res = await fetch("http://localhost:8080/api/movies/upload", {
+    const res = await fetch("http://localhost:8080/api/movies/uploadMovie", {
       method: "POST",
       body: formData,
     });

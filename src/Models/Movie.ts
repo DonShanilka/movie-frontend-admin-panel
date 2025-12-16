@@ -1,17 +1,17 @@
 
 export class Movie {
-  title !: string;
-  description !: string;
-  release_year !: string;
-  language !: string;
-  duration !: string;
-  rating !: string;
-  age_rating !: string;
-  country !: string;
-  movie ?: File | string;
-  thumbnail ?: File | string;
-  banner ?: File | string;
-  trailer ?: File | string;
+  Title !: string;
+  Description !: string;
+  ReleaseYear !: string;
+  Language !: string;
+  Duration !: string;
+  Rating !: string;
+  AgeRating !: string;
+  Country !: string;
+  Movie ?: File | string;
+  Thumbnail ?: File | string;
+  Banner ?: File | string;
+  Trailer ?: File | string;
 
   constructor(data: Partial<Movie>) {
     Object.assign(this, data);

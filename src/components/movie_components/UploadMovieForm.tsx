@@ -13,7 +13,6 @@ import SaveButton from "../UI/SaveButton";
 import { Movie } from "../../models/Movie";
 // import DateInput from "../UI/DateInput";
 
-
 export default function UploadMovieForm() {
   const dispatch = useDispatch<AppDispatch>();
   const [fileKey, setFileKey] = useState(0);
@@ -21,7 +20,7 @@ export default function UploadMovieForm() {
   const [banner, setBanner] = useState<File | null>(null);
   const [trailer, setTrailer] = useState<File | null>(null);
   const [movieFile, setMovieFile] = useState<File | null>(null);
-//   const [releaseYear, setReleaseYear] = useState<Date | null>(null);
+  //   const [releaseYear, setReleaseYear] = useState<Date | null>(null);
 
   const { loading, error, success } = useSelector(
     (state: RootState) => state.movies
@@ -51,12 +50,21 @@ export default function UploadMovieForm() {
     e.preventDefault();
 
     const movie = new Movie({
-      ...formData,
-      movie: movieFile,
-      thumbnail: thumbnail,
-      banner: banner,
-      trailer: trailer,
+      Title: formData.title,
+      Description: formData.description,
+      ReleaseYear: formData.release_year,
+      Language: formData.language,
+      Duration: formData.duration,
+      Rating: formData.rating,
+      AgeRating: formData.age_rating,
+      Country: formData.country,
+      Movie: movieFile,
+      Thumbnail: thumbnail,
+      Banner: banner,
+      Trailer: trailer,
     });
+
+    console.log("Submitting movie:", movie);
 
     dispatch(uploadMovie(movie));
   };
@@ -69,7 +77,7 @@ export default function UploadMovieForm() {
       setThumbnail(null);
       setBanner(null);
       setTrailer(null);
-    //   setFileKey((prev) => prev + 1);
+      //   setFileKey((prev) => prev + 1);
       dispatch(resetMovieState());
     }
 

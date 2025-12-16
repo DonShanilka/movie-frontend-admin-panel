@@ -1,4 +1,4 @@
-import MovieList from '@/components/movie/MovieList'
+import MovieList from '@/components/movie_components/MovieList'
 import MovieTopbar from '@/components/movie_components/movieTopbar'
 import React from 'react'
 

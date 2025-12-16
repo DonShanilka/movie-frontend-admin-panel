@@ -1,9 +1,15 @@
 export interface MovieTypes {
   id: string;
-  title: string;
-  description: string;
-  release_year: string;
-  language: string;
-  rating: string;
-  thumbnail: string;
+  Title: string;
+  Description: string;
+  ReleaseYear: string;
+  Language: string;
+  Rating: string;
+  Thumbnail: string;
+  Duration:  string;
+  Movie_URL: string;
+  Country   :string;
+  AgeRating: string;
+  Banner    :string;
+  Trailer   :string;
 }

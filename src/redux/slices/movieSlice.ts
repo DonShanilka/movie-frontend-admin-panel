@@ -3,6 +3,9 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Movie } from "../../models/Movie";
 import { MovieService } from "../../services/movieService";
 import { MovieTypes } from "@/types/movieTypes";
+import axios from "axios";
+
+const API_URL = "http://localhost:8080/api/movies";
 
 interface MovieState {
   movies: MovieTypes[];
@@ -27,6 +30,21 @@ export const uploadMovie = createAsyncThunk(
       return data;
     } catch (err: any) {
       return rejectWithValue(err.message);
+    }
+  }
+);
+
+// Update an existing movie
+export const updateMovie = createAsyncThunk(
+  "movies/updateMovie",
+  async (movie: FormData, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(`${API_URL}/update`, movie, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return response.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || err.message);
     }
   }
 );
