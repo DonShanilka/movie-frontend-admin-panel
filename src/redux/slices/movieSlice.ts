@@ -83,6 +83,7 @@ const movieSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+        // getAll
       .addCase(getAllMovies.pending, (s) => { s.loading = true; })
       .addCase(getAllMovies.fulfilled, (s, a) => {
         s.loading = false;
@@ -93,6 +94,7 @@ const movieSlice = createSlice({
         s.error = a.payload as string;
       })
 
+      // create 
       .addCase(createMovie.pending, (s) => { s.loading = true; })
       .addCase(createMovie.fulfilled, (s) => {
         s.loading = false;
@@ -103,6 +105,7 @@ const movieSlice = createSlice({
         s.error = a.payload as string;
       })
 
+      // update
       .addCase(updateMovie.pending, (s) => { s.loading = true; })
       .addCase(updateMovie.fulfilled, (s) => {
         s.loading = false;
@@ -111,7 +114,16 @@ const movieSlice = createSlice({
       .addCase(updateMovie.rejected, (s, a) => {
         s.loading = false;
         s.error = a.payload as string;
-      });
+      })
+
+      // delete 
+      .addCase(deleteMovie.pending, (s) => { s.loading = true; })
+      .addCase(deleteMovie.fulfilled, (s, a) => {
+        s.loading = false;
+        s.success = true;
+        s.movies = s.movies.filter((m) => m.Id !== a.payload && m.id !== a.payload);
+      })
+      .addCase(deleteMovie.rejected, (s, a) => { s.loading = false; s.error = a.payload as string; });
   },
 });
 
