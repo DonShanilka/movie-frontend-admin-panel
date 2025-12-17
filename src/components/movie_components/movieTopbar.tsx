@@ -47,7 +47,7 @@ export default function MovieTopbar() {
 
       {/* Popup Modal */}
       <Modal open={open} onClose={() => setOpen(false)}>
-        <MovieForm />
+        <MovieForm onClose={() => setOpen(false)} />
       </Modal>
 
     </div>

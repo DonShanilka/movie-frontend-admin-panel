@@ -113,11 +113,6 @@ const COUNTRIES = [
   "Turkmenistan",
   "Kyrgyzstan",
   "Tajikistan",
-  "Kyrgyzstan",
-  "Tajikistan",
-  "Turkmenistan",
-  "Kyrgyzstan",
-  "Tajikistan",
 ];
 
 type Props = {
@@ -160,9 +155,9 @@ export default function CountrySelect({ label, value, onChange }: Props) {
             </div>
           )}
 
-          {filtered.map((country) => (
+          {filtered.map((country, index) => (
             <div
-              key={country}
+              key={`${country}-${index}`}
               onClick={() => {
                 onChange(country);
                 setSearch("");

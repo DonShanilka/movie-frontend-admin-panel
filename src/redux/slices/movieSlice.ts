@@ -1,107 +1,104 @@
-// src/redux/slices/movieSlice.ts
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { Movie } from "../../models/Movie";
-import { MovieService } from "../../services/movieService";
-import { MovieTypes } from "@/types/movieTypes";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api/movies";
-
-interface MovieState {
-  movies: MovieTypes[];
-  loading: boolean;
-  error: string | null;
-  success: boolean;
-}
-
-const initialState: MovieState = {
-  movies: [],
-  loading: false,
-  error: null,
-  success: false,
-};
-
-// Thunk to create movie
-export const createMovie = createAsyncThunk(
-  "movies/createMovie",
-  async (movie: Movie, { rejectWithValue }) => {
-    try {
-      const data = await MovieService.uploadMovie(movie);
-      return data;
-    } catch (err: any) {
-      return rejectWithValue(err.message);
-    }
-  }
-);
-
-// Update an existing movie
-export const updateMovie = createAsyncThunk(
-  "movies/updateMovie",
-  async (movie: FormData, { rejectWithValue }) => {
-    try {
-      const response = await axios.put(`${API_URL}/update`, movie, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      return response.data;
-    } catch (err: any) {
-      return rejectWithValue(err.response?.data?.message || err.message);
-    }
-  }
-);
-
-// Thunk to fetch all movies
-export const getAllMovies = createAsyncThunk<
-  MovieTypes[],
-  void,
-  { rejectValue: string }
->("movies/getAllMovies", async (_, { rejectWithValue }) => {
-  try {
-    const data = await MovieService.getAllMovies();
-    console.log("Fetched movies:", data);
-    return data;
-  } catch (err: any) {
-    return rejectWithValue(err.message);
-  }
+const apiClient = axios.create({
+  baseURL: "http://localhost:8080",
 });
+
+/* ================= THUNKS ================= */
+
+export const getAllMovies = createAsyncThunk(
+  "movies/getAll",
+  async (_, thunkAPI) => {
+    try {
+      const res = await apiClient.get("/api/movies/getAllMovies");
+      return res.data;
+    } catch (err: any) {
+      return thunkAPI.rejectWithValue("Failed to fetch movies");
+    }
+  }
+);
+
+export const createMovie = createAsyncThunk(
+  "movies/create",
+  async (formData: FormData, thunkAPI) => {
+    try {
+      const res = await apiClient.post(
+        "/api/movies/createMovie",
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+      return res.data;
+    } catch {
+      return thunkAPI.rejectWithValue("Create failed");
+    }
+  }
+);
+
+export const updateMovie = createAsyncThunk(
+  "movies/update",
+  async (formData: FormData, thunkAPI) => {
+    try {
+      const res = await apiClient.put(
+        "/api/movies/updateMovie", // ✅ EXACT backend route
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+      return res.data;
+    } catch {
+      return thunkAPI.rejectWithValue("Update failed");
+    }
+  }
+);
+
+
+/* ================= SLICE ================= */
 
 const movieSlice = createSlice({
   name: "movies",
-  initialState,
+  initialState: {
+    movies: [] as any[],
+    loading: false,
+    success: false,
+    error: null as string | null,
+  },
   reducers: {
-    resetMovieState(state) {
+    resetMovieState: (state) => {
       state.loading = false;
-      state.error = null;
       state.success = false;
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createMovie.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-        state.success = false;
+      .addCase(getAllMovies.pending, (s) => { s.loading = true; })
+      .addCase(getAllMovies.fulfilled, (s, a) => {
+        s.loading = false;
+        s.movies = a.payload;
       })
-      .addCase(createMovie.fulfilled, (state) => {
-        state.loading = false;
-        state.success = true;
+      .addCase(getAllMovies.rejected, (s, a) => {
+        s.loading = false;
+        s.error = a.payload as string;
       })
-      .addCase(createMovie.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      });
 
-    builder
-      .addCase(getAllMovies.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+      .addCase(createMovie.pending, (s) => { s.loading = true; })
+      .addCase(createMovie.fulfilled, (s) => {
+        s.loading = false;
+        s.success = true;
       })
-      .addCase(getAllMovies.fulfilled, (state, action) => {
-        state.loading = false;
-        state.movies = action.payload;
+      .addCase(createMovie.rejected, (s, a) => {
+        s.loading = false;
+        s.error = a.payload as string;
       })
-      .addCase(getAllMovies.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
+
+      .addCase(updateMovie.pending, (s) => { s.loading = true; })
+      .addCase(updateMovie.fulfilled, (s) => {
+        s.loading = false;
+        s.success = true;
+      })
+      .addCase(updateMovie.rejected, (s, a) => {
+        s.loading = false;
+        s.error = a.payload as string;
       });
   },
 });

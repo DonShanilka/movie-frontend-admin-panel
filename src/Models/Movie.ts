@@ -1,5 +1,6 @@
 
 export class Movie {
+  Id !: number;
   Title !: string;
   Description !: string;
   ReleaseYear !: string;
