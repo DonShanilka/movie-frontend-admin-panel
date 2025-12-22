@@ -9,6 +9,7 @@ export class Movie {
   Rating !: string;
   AgeRating !: string;
   Country !: string;
+  Genre !: string;
   Movie ?: File | string;
   Thumbnail ?: File | string;
   Banner ?: File | string;

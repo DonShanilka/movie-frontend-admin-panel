@@ -16,6 +16,7 @@ import LanguageSelect from "../UI/LanguageSelect";
 import CountrySelect from "../UI/CountrySelect";
 import FileInput from "../UI/FileInput";
 import SaveButton from "../UI/SaveButton";
+import GenreSelect from "../UI/GenreSelect";
 
 export default function MovieForm({
   movie,
@@ -40,6 +41,7 @@ export default function MovieForm({
     Rating: "",
     AgeRating: "",
     Country: "",
+    Genre:"",
   });
 
   const [movieFile, setMovieFile] = useState<File | null>(null);
@@ -59,6 +61,7 @@ export default function MovieForm({
         Rating: movie.Rating || "",
         AgeRating: movie.AgeRating || "",
         Country: movie.Country || "",
+        Genre: movie.Genre || "",
       });
     }
   }, [movie]);
@@ -157,10 +160,10 @@ export default function MovieForm({
           value={formData.Country}
           onChange={(v) => setFormData({ ...formData, Country: v })}
         />
-        <FileInput
-          label="Movie File"
-          onChange={(e: any) => setMovieFile(e.target.files?.[0] || null)}
-        />
+        <GenreSelect 
+        label="Genre"
+        value={formData.Genre}
+        onChange={(v) => setFormData({...formData, Genre: v})}/>
       </div>
 
       <textarea
@@ -183,6 +186,10 @@ export default function MovieForm({
         <FileInput
           label="Trailer"
           onChange={(e: any) => setTrailer(e.target.files?.[0] || null)}
+        />
+        <FileInput
+          label="Movie File"
+          onChange={(e: any) => setMovieFile(e.target.files?.[0] || null)}
         />
       </div>
 
