@@ -32,3 +32,19 @@ export const createTvSeries = createAsyncThunk(
     }
   }
 );
+
+export const updateTvSeries = createAsyncThunk(
+  "tvSeries/update",
+  async (formData: FormData, thunkAPI) => {
+    try {
+      const response = await apiClient.put(
+        "/api/series/updateSeries", // ✅ EXACT backend route
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+      return response.data;
+    } catch {
+      return thunkAPI.rejectWithValue("Update failed");
+    }
+  }
+);
