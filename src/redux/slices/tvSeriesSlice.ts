@@ -48,3 +48,15 @@ export const updateTvSeries = createAsyncThunk(
     }
   }
 );
+
+export const deleteTvSeries = createAsyncThunk(
+  "tvSeries/delete",
+  async (id: number, thunkAPI) => {
+    try {
+      const response = await apiClient.delete(`/api/series/deleteSeries?id=${id}`);
+      return id; // return deleted tv series id
+    } catch {
+      return thunkAPI.rejectWithValue("Delete failed");
+    }
+  }
+);
