@@ -1,5 +1,5 @@
 import MovieList from '@/components/movie_components/MovieList'
-import MovieTopbar from '@/components/movie_components/movieTopbar'
+import MovieTopbar from '@/components/movie_components/MovieTopbar'
 import React from 'react'
 
 function page() {
