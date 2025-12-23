@@ -60,3 +60,68 @@ export const deleteTvSeries = createAsyncThunk(
     }
   }
 );
+
+
+const tvSeriesSlice = createSlice({
+  name: "tvSeries",
+  initialState: {
+    tvSeries: [] as any[],
+    loading: false,
+    success: false,
+    error: null as string | null,
+  },
+  reducers: {
+    resetTvSeriesState: (state) => {
+      state.loading = false;
+      state.success = false;
+      state.error = null;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+        // getAll
+      .addCase(getAllTvSeries.pending, (s) => { s.loading = true; })
+      .addCase(getAllTvSeries.fulfilled, (s, a) => {
+        s.loading = false;
+        s.tvSeries = a.payload;
+      })
+      .addCase(getAllTvSeries.rejected, (s, a) => {
+        s.loading = false;
+        s.error = a.payload as string;
+      })
+
+      // create 
+      .addCase(createTvSeries.pending, (s) => { s.loading = true; })
+      .addCase(createTvSeries.fulfilled, (s) => {
+        s.loading = false;
+        s.success = true;
+      })
+      .addCase(createTvSeries.rejected, (s, a) => {
+        s.loading = false;
+        s.error = a.payload as string;
+      })
+
+      // update
+      .addCase(updateTvSeries.pending, (s) => { s.loading = true; })
+      .addCase(updateTvSeries.fulfilled, (s) => {
+        s.loading = false;
+        s.success = true;
+      })
+      .addCase(updateTvSeries.rejected, (s, a) => {
+        s.loading = false;
+        s.error = a.payload as string;
+      })
+
+      // delete 
+      .addCase(deleteTvSeries.pending, (s) => { s.loading = true; })
+      .addCase(deleteTvSeries.fulfilled, (s, a) => {
+        s.loading = false;
+        s.success = true;
+        s.tvSeries = s.tvSeries.filter((m) => m.Id !== a.payload && m.id !== a.payload);
+      })
+      .addCase(deleteTvSeries.rejected, (s, a) => { s.loading = false; s.error = a.payload as string; });
+  },
+});
+
+export const { resetTvSeriesState } = tvSeriesSlice.actions;
+export default tvSeriesSlice.reducer;
