@@ -5,7 +5,7 @@ import Modal from "../UI/Modal";
 import MovieForm from "./MovieForm";
 import { useState } from "react";
 
-export default function MovieTopbar() {
+export default function TvSeriesTopbar() {
 
   const [open, setOpen] =  useState(false);
 
@@ -17,7 +17,7 @@ export default function MovieTopbar() {
         <Search className="text-gray-600 w-5 h-5 " />
         <input
           type="text"
-          placeholder="Search movies..."
+          placeholder="Search series..."
           className="w-full bg-transparent outline-none text-gray-500 ml-2"
         />
       </div>
