@@ -10,12 +10,8 @@ import {
 } from "@/redux/slices/episodeSlice";
 
 import Input from "../UI/Input";
-import Select from "../UI/Select";
-import LanguageSelect from "../UI/LanguageSelect";
-import CountrySelect from "../UI/CountrySelect";
 import FileInput from "../UI/FileInput";
 import SaveButton from "../UI/SaveButton";
-import GenreSelect from "../UI/GenreSelect";
 
 export default function EpisodeForm({
   episode,
@@ -31,38 +27,32 @@ export default function EpisodeForm({
 
   const isEdit = Boolean(episode?.id);
 
+  // 🔑 use snake_case keys (match backend)
   const [formData, setFormData] = useState({
-    id            : 0,
-	seriesID      : 0,
-	seasonNumber  : 0,
-	episodeNumber : 0,
-	title         : "",
-	description   : "",
-	duration      : 0,
-	thumbnailURL  : "",
-	episode      : "",
-	releaseDate   : "",
+    id: 0,
+    series_id: 0,
+    season_number: 0,
+    episode_number: 0,
+    title: "",
+    description: "",
+    duration: 0,
+    release_date: "",
   });
 
-  //   const [movieFile, setMovieFile] = useState<File | null>(null);
-  //   const [thumbnail, setThumbnail] = useState<File | null>(null);
-  const [banner, setBanner] = useState<File | null>(null);
-  const [trailer, setTrailer] = useState<File | null>(null);
+  const [episodeFile, setEpisodeFile] = useState<File | null>(null);
 
   // Populate data on edit
   useEffect(() => {
     if (episode) {
       setFormData({
-        id: episode.id || 0,
-        seriesID: episode.seriesID || 0,
-        seasonNumber: episode.seasonNumber || 0,
-        episodeNumber: episode.episodeNumber || 0,
-        title: episode.title || "",
-        description: episode.description || "",
-        duration: episode.duration || 0,
-        thumbnailURL: episode.thumbnailURL || "",
-        episode: episode.episode || "",
-        releaseDate: episode.releaseDate || "",
+        id: episode.id ?? 0,
+        series_id: episode.series_id ?? episode.seriesID ?? 0,
+        season_number: episode.season_number ?? episode.seasonNumber ?? 0,
+        episode_number: episode.episode_number ?? episode.episodeNumber ?? 0,
+        title: episode.title ?? "",
+        description: episode.description ?? "",
+        duration: episode.duration ?? 0,
+        release_date: episode.release_date ?? episode.releaseDate ?? "",
       });
     }
   }, [episode]);
@@ -79,35 +69,34 @@ export default function EpisodeForm({
 
     const data = new FormData();
 
-    if (isEdit) {
-      data.append("Id", String(episode.id)); // ✅ FIXED
-    }
-
+    // ✅ append fields EXACTLY as backend expects
     Object.entries(formData).forEach(([key, value]) => {
       data.append(key, String(value));
     });
 
-    // if (movieFile) data.append("Movie", movieFile);
-    // if (thumbnail) data.append("Thumbnail", thumbnail);
-    if (banner) data.append("banner", banner);
-    if (trailer) data.append("trailer", trailer);
+    if (episodeFile) {
+      data.append("episode", episodeFile);
+    }
 
-    console.log("Submitting Episode Form Data:", data);
+    console.log("Submitting Episode FormData:");
+    for (const pair of data.entries()) {
+      console.log(pair[0], pair[1]);
+    }
 
     isEdit ? dispatch(updateEpisode(data)) : dispatch(createEpisode(data));
   };
 
-//   useEffect(() => {
-//     if (success) {
-//       dispatch(resetEpisodeState());
-//       dispatch(getAllEpisodes());
-//       onClose();
-//     }
-//     if (error) {
-//       alert(error);
-//       dispatch(resetEpisodeState());
-//     }
-//   }, [success, error, dispatch, onClose]);
+  // close modal & refresh
+  useEffect(() => {
+    if (success) {
+      dispatch(resetEpisodeState());
+      onClose();
+    }
+    if (error) {
+      alert(error);
+      dispatch(resetEpisodeState());
+    }
+  }, [success, error, dispatch, onClose]);
 
   return (
     <form
@@ -125,51 +114,57 @@ export default function EpisodeForm({
           value={formData.title}
           onChange={handleChange}
         />
+
         <Input
-          label="Release Date"
-          name="releaseDate"
-          type="date"
-          value={formData.releaseDate}
+          label="Series ID"
+          name="series_id"
+          type="number"
+          value={formData.series_id}
           onChange={handleChange}
         />
-        {/* <LanguageSelect
-          label="Language"
-          value={formData.language}
-          onChange={(v) => setFormData({ ...formData, language: v })}
-        /> */}
+
         <Input
-          label="Duration"
+          label="Season Number"
+          name="season_number"
+          type="number"
+          value={formData.season_number}
+          onChange={handleChange}
+        />
+
+        <Input
+          label="Episode Number"
+          name="episode_number"
+          type="number"
+          value={formData.episode_number}
+          onChange={handleChange}
+        />
+
+        <Input
+          label="Duration (minutes)"
           name="duration"
+          type="number"
           value={formData.duration}
           onChange={handleChange}
         />
+
         <Input
-          label="Series ID"
-          name="seriesID"
-          type="number"
-          value={formData.seriesID}
+          label="Release Date"
+          name="release_date"
+          type="date"
+          value={formData.release_date}
           onChange={handleChange}
         />
-        <Input
-          label="Season Number"
-          name="seasonNumber"
-          type="number"
-          value={formData.seasonNumber}
-          onChange={handleChange}
+
+        <FileInput
+          label="Episode File"
+          onChange={(e: any) =>
+            setEpisodeFile(e.target.files?.[0] || null)
+          }
         />
-        {/* <CountrySelect
-          label="Country"
-          value={formData.country}
-          onChange={(v) => setFormData({ ...formData, country: v })}
-        /> */}
-        {/* <GenreSelect
-          label="Genre"
-          value={formData.genre}
-          onChange={(v) => setFormData({ ...formData, genre: v })}
-        /> */}
       </div>
 
       <textarea
+        placeholder="Description"
         name="description"
         rows={3}
         value={formData.description}
@@ -177,31 +172,12 @@ export default function EpisodeForm({
         className="w-full bg-gray-800 p-2 rounded text-white"
       />
 
-      <div className="grid md:grid-cols-2 gap-4">
-        {/* <FileInput
-          label="Thumbnail"
-          onChange={(e: any) => setBanner(e.target.files?.[0] || null)}
-        /> */}
-        <FileInput
-          label="Banner"
-          onChange={(e: any) => setBanner(e.target.files?.[0] || null)}
-        />
-        <FileInput
-          label="Trailer"
-          onChange={(e: any) => setTrailer(e.target.files?.[0] || null)}
-        />
-        {/* <FileInput
-          label="Movie File"
-          onChange={(e: any) => setMovieFile(e.target.files?.[0] || null)}
-        /> */}
-      </div>
-
       <SaveButton type="submit" fullWidth>
         {loading
           ? "Processing..."
           : isEdit
-          ? "Update TvSeries"
-          : "Save TvSeries"}
+          ? "Update Episode"
+          : "Save Episode"}
       </SaveButton>
     </form>
   );

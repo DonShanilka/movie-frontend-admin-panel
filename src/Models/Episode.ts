@@ -7,11 +7,11 @@ export class Episode {
 	Title         !: string;
 	Description   !: string;
 	Duration      !: number;
-	ThumbnailURL  !: string;
-	Episode      !: string;
+	EpisodeUrl      !: string;
 	ReleaseDate   !: string;
 
     constructor(data: Partial<Episode>) {
     Object.assign(this, data);
   }
 }
+    
