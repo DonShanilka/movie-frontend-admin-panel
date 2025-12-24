@@ -9,7 +9,7 @@ export const getAllTvSeries = createAsyncThunk(
   "tvSeries/getAll",
   async (_, thunkAPI) => {
     try {
-      const response = await apiClient.get("/api/series/createSeries");
+      const response = await apiClient.get("/api/series/getAllSeries");
       return response.data;
     } catch (err: any) {
       return thunkAPI.rejectWithValue("Failed to fetch tv series");
@@ -51,10 +51,10 @@ export const updateTvSeries = createAsyncThunk(
 
 export const deleteTvSeries = createAsyncThunk(
   "tvSeries/delete",
-  async (id: number, thunkAPI) => {
+  async (ID: number, thunkAPI) => {
     try {
-      const response = await apiClient.delete(`/api/series/deleteSeries?id=${id}`);
-      return id; // return deleted tv series id
+      const response = await apiClient.delete(`/api/series/deleteSeries?id=${ID}`);
+      return ID; // return deleted tv series id
     } catch {
       return thunkAPI.rejectWithValue("Delete failed");
     }

@@ -4,11 +4,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store/store";
 import {
-  createTvSeries,
-  updateTvSeries,
-  resetTvSeriesState,
-  getAllTvSeries,
-} from "@/redux/slices/tvSeriesSlice";
+  createEpisode,
+  updateEpisode,
+  resetEpisodeState,
+} from "@/redux/slices/episodeSlice";
 
 import Input from "../UI/Input";
 import Select from "../UI/Select";
@@ -18,33 +17,31 @@ import FileInput from "../UI/FileInput";
 import SaveButton from "../UI/SaveButton";
 import GenreSelect from "../UI/GenreSelect";
 
-export default function TvSeriesForm({
-  series,
+export default function EpisodeForm({
+  episode,
   onClose,
 }: {
-  series?: any;
+  episode?: any;
   onClose: () => void;
 }) {
   const dispatch = useDispatch<AppDispatch>();
   const { loading, success, error } = useSelector(
-    (state: RootState) => state.tvSeries
+    (state: RootState) => state.episode
   );
 
-  const isEdit = Boolean(series?.Id);
+  const isEdit = Boolean(episode?.id);
 
   const [formData, setFormData] = useState({
-    id: "",
-    title: "",
-    description: "",
-    releaseYear: 0,
-    language: "",
-    seasonCount: 0,
-    rating: 0,
-    ageRating: "",
-    country: "",
-    genre: "",
-    banner: undefined,
-    trailer: undefined,
+    id            : 0,
+	seriesID      : 0,
+	seasonNumber  : 0,
+	episodeNumber : 0,
+	title         : "",
+	description   : "",
+	duration      : 0,
+	thumbnailURL  : "",
+	episode      : "",
+	releaseDate   : "",
   });
 
   //   const [movieFile, setMovieFile] = useState<File | null>(null);
@@ -54,23 +51,21 @@ export default function TvSeriesForm({
 
   // Populate data on edit
   useEffect(() => {
-    if (series) {
+    if (episode) {
       setFormData({
-        id: series.id || "",
-        title: series.title || "",
-        description: series.description || "",
-        releaseYear: series.releaseYear || 0,
-        language: series.language || "",
-        seasonCount: series.seasonCount || 0,
-        rating: series.rating || 0,
-        ageRating: series.ageRating || "",
-        country: series.country || "",
-        genre: series.genre || "",
-        banner: series.banner || "",
-        trailer: series.trailer || "",
+        id: episode.id || 0,
+        seriesID: episode.seriesID || 0,
+        seasonNumber: episode.seasonNumber || 0,
+        episodeNumber: episode.episodeNumber || 0,
+        title: episode.title || "",
+        description: episode.description || "",
+        duration: episode.duration || 0,
+        thumbnailURL: episode.thumbnailURL || "",
+        episode: episode.episode || "",
+        releaseDate: episode.releaseDate || "",
       });
     }
-  }, [series]);
+  }, [episode]);
 
   const handleChange = (e: any) => {
     setFormData({
@@ -85,7 +80,7 @@ export default function TvSeriesForm({
     const data = new FormData();
 
     if (isEdit) {
-      data.append("Id", String(series.Id)); // ✅ FIXED
+      data.append("Id", String(episode.id)); // ✅ FIXED
     }
 
     Object.entries(formData).forEach(([key, value]) => {
@@ -97,20 +92,20 @@ export default function TvSeriesForm({
     if (banner) data.append("banner", banner);
     if (trailer) data.append("trailer", trailer);
 
-    console.log("Submitting TvSeries Form Data:", data);
+    console.log("Submitting Episode Form Data:", data);
 
-    isEdit ? dispatch(updateTvSeries(data)) : dispatch(createTvSeries(data));
+    isEdit ? dispatch(updateEpisode(data)) : dispatch(createEpisode(data));
   };
 
 //   useEffect(() => {
 //     if (success) {
-//       dispatch(resetTvSeriesState());
-//       dispatch(getAllTvSeries());
+//       dispatch(resetEpisodeState());
+//       dispatch(getAllEpisodes());
 //       onClose();
 //     }
 //     if (error) {
 //       alert(error);
-//       dispatch(resetTvSeriesState());
+//       dispatch(resetEpisodeState());
 //     }
 //   }, [success, error, dispatch, onClose]);
 
@@ -120,7 +115,7 @@ export default function TvSeriesForm({
       className="bg-gray-900 p-6 rounded-xl space-y-6"
     >
       <h2 className="text-2xl font-bold text-white">
-        {isEdit ? "Update TvSeries" : "Add New TvSeries"}
+        {isEdit ? "Update Episode" : "Add New Episode"}
       </h2>
 
       <div className="grid md:grid-cols-2 gap-4">
@@ -131,50 +126,47 @@ export default function TvSeriesForm({
           onChange={handleChange}
         />
         <Input
-          label="Release Year"
-          name="releaseYear"
-          type="number"
-          value={formData.releaseYear}
+          label="Release Date"
+          name="releaseDate"
+          type="date"
+          value={formData.releaseDate}
           onChange={handleChange}
         />
-        <LanguageSelect
+        {/* <LanguageSelect
           label="Language"
           value={formData.language}
           onChange={(v) => setFormData({ ...formData, language: v })}
-        />
-        {/* <Input
-          label="Duration"
-          name="Duration"
-          value={formData.Duration}
-          onChange={handleChange}
         /> */}
         <Input
-          label="Rating"
-          name="rating"
+          label="Duration"
+          name="duration"
+          value={formData.duration}
+          onChange={handleChange}
+        />
+        <Input
+          label="Series ID"
+          name="seriesID"
           type="number"
-          value={formData.rating}
+          value={formData.seriesID}
           onChange={handleChange}
         />
-        <Select
-          label="Age Rating"
-          name="ageRating"
-          value={formData.ageRating}
+        <Input
+          label="Season Number"
+          name="seasonNumber"
+          type="number"
+          value={formData.seasonNumber}
           onChange={handleChange}
-          options={[
-            { label: "PG", value: "PG" },
-            { label: "18+", value: "18+" },
-          ]}
         />
-        <CountrySelect
+        {/* <CountrySelect
           label="Country"
           value={formData.country}
           onChange={(v) => setFormData({ ...formData, country: v })}
-        />
-        <GenreSelect
+        /> */}
+        {/* <GenreSelect
           label="Genre"
           value={formData.genre}
           onChange={(v) => setFormData({ ...formData, genre: v })}
-        />
+        /> */}
       </div>
 
       <textarea
