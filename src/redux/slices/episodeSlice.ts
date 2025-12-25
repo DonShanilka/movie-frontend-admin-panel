@@ -9,7 +9,7 @@ export const getAllEpisode = createAsyncThunk(
   "episode/getAll",
   async (_, thunkAPI) => {
     try {
-      const response = await apiClient.get("/api/episode/getAllEpisodes");
+      const response = await apiClient.get("/api/episode/getAllEpisode");
       return response.data;
     } catch (err: any) {
       return thunkAPI.rejectWithValue("Failed to fetch episodes");
