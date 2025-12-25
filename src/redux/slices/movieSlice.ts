@@ -25,15 +25,15 @@ export const createMovie = createAsyncThunk(
     try {
       const res = await apiClient.post(
         "/api/movies/createMovie",
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
+        formData
       );
       return res.data;
-    } catch {
+    } catch (err) {
       return thunkAPI.rejectWithValue("Create failed");
     }
   }
 );
+
 
 export const updateMovie = createAsyncThunk(
   "movies/update",
