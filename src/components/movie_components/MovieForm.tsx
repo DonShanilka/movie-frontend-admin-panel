@@ -122,7 +122,7 @@ export default function MovieForm({
         <LanguageSelect label="Language" value={formData.language} onChange={(v) => setFormData({ ...formData, language: v })} />
         <Input label="Duration" name="duration" value={formData.duration} onChange={handleChange} />
         <Input label="Rating" name="rating" value={formData.rating} onChange={handleChange} />
-        <Select label="Age Rating" name="ageRating" value={formData.ageRating} onChange={handleChange} options={[
+        <Select label="Age Rating" name="ageRating" value={formData.ageRating} onChange={handleChange as any} options={[
           { label: "PG", value: "PG" },
           { label: "18+", value: "18+" },
         ]} />
