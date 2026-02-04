@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: "http://localhost:8081",
 });
 
 export const getAllEpisode = createAsyncThunk(
@@ -38,7 +38,7 @@ export const updateEpisode = createAsyncThunk(
   async (formData: FormData, thunkAPI) => {
     try {
       const response = await apiClient.put(
-        "/api/episode/updateEpisode", // ✅ EXACT backend route
+        "/api/episode/updateEpisode",
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
