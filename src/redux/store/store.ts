@@ -3,12 +3,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import movieReducer from "../slices/movieSlice";
 import tvSeriesReducer from "../slices/tvSeriesSlice";
 import episodeReducer from "../slices/episodeSlice";
+import authReducer from "../slices/authSlice";
 
 export const store = configureStore({
   reducer: {
     movies: movieReducer,
     tvSeries: tvSeriesReducer,
     episode: episodeReducer,
+    auth: authReducer,
   },
 });
 

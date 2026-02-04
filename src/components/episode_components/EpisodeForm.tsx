@@ -27,7 +27,7 @@ export default function EpisodeForm({
 
   const isEdit = Boolean(episode?.id);
 
-  // 🔑 use snake_case keys (match backend)
+  // use snake_case keys (match backend)
   const [formData, setFormData] = useState({
     id: 0,
     series_id: 0,
@@ -69,7 +69,7 @@ export default function EpisodeForm({
 
     const data = new FormData();
 
-    // ✅ append fields EXACTLY as backend expects
+    // append fields EXACTLY as backend expects
     Object.entries(formData).forEach(([key, value]) => {
       data.append(key, String(value));
     });

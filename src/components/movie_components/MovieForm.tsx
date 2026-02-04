@@ -89,7 +89,7 @@ export default function MovieForm({
     if (banner) data.append("banner", banner);
     if (trailer) data.append("trailer", trailer);
 
-    // 🔥 DEBUG PRINT
+    // DEBUG PRINT
     console.log("==== FORM DATA ====");
     for (const pair of data.entries()) {
       console.log(pair[0], pair[1]);

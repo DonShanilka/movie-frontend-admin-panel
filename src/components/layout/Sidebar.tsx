@@ -11,11 +11,20 @@ import {
   CreditCard,
   Settings,
   Sparkles,
+  LogOut,
 } from "lucide-react";
+import { useAppDispatch } from "@/redux/hooks";
+import { logout } from "@/redux/slices/authSlice";
 
 export default function SidebarNavigation() {
   const router = useRouter();
   const pathname = usePathname();
+  const dispatch = useAppDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    router.push("/signin");
+  };
 
   const menuItems = [
     { id: "menu", label: "MENU", isHeader: true },
@@ -61,11 +70,10 @@ export default function SidebarNavigation() {
                 <li key={item.id}>
                   <button
                     onClick={() => router.push(item.path ? item.path : "/")}
-                    className={`flex w-full items-center gap-3 p-3 rounded-md text-sm transition ${
-                      isActive
+                    className={`flex w-full items-center gap-3 p-3 rounded-md text-sm transition ${isActive
                         ? "bg-yellow-300 text-black font-bold shadow-md"
                         : "text-gray-300 hover:bg-gray-800 hover:text-white"
-                    }`}
+                      }`}
                   >
                     <item.icon className="w-5 h-5" />
                     {item.label}
@@ -75,6 +83,17 @@ export default function SidebarNavigation() {
             })}
           </ul>
         </nav>
+      </div>
+
+      {/* Logout Section */}
+      <div className="p-4 border-t border-gray-900">
+        <button
+          onClick={handleLogout}
+          className="flex w-full items-center gap-3 p-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all active:scale-[0.98]"
+        >
+          <LogOut className="w-5 h-5" />
+          Logout
+        </button>
       </div>
     </div>
   );
