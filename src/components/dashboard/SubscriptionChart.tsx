@@ -16,7 +16,7 @@ const SubscriptionChart = () => {
     return (
         <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800">
             <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-6 font-primary">Subscription Types</h3>
-            <div className="h-[300px] w-full">
+            <div className="h-[220px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                         <Pie

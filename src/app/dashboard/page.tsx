@@ -75,22 +75,21 @@ export default function DashboardPage() {
               <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-100 font-primary">Recent Activity</h3>
               <button className="text-sm font-medium text-indigo-600 hover:text-indigo-500 transition-colors">View all</button>
             </div>
-            <div className="space-y-6">
+            <div className="space-y-4">
               {[
                 { user: 'Alex Morgan', action: 'Subscribed to Premium', time: '2 mins ago', icon: Activity },
                 { user: 'Sarah Chen', action: 'Watched "Interstellar"', time: '15 mins ago', icon: Film },
                 { user: 'Mike Ross', action: 'New TV Series Added: "The Bear"', time: '1 hour ago', icon: Tv },
-                { user: 'Jessica Day', action: 'Upgraded to Family Plan', time: '3 hours ago', icon: TrendingUp },
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-4">
-                  <div className="p-2 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
-                    <item.icon className="w-5 h-5 text-zinc-600 dark:text-zinc-400" />
+                  <div className="p-1.5 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
+                    <item.icon className="w-4 h-4 text-zinc-600 dark:text-zinc-400" />
                   </div>
                   <div>
                     <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{item.user}</p>
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400">{item.action}</p>
+                    <p className="text-[10px] text-zinc-500 dark:text-zinc-400">{item.action}</p>
                   </div>
-                  <span className="ml-auto text-xs text-zinc-400">{item.time}</span>
+                  <span className="ml-auto text-[10px] text-zinc-400">{item.time}</span>
                 </div>
               ))}
             </div>
