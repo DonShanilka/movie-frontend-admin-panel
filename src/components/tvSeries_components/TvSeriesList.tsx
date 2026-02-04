@@ -34,127 +34,125 @@ export default function TvSeriesList() {
   if (error) return <div className="p-10 text-red-500">{error}</div>;
 
   return (
-    <div className="bg-black rounded-2xl border border-gray-800 overflow-hidden">
-      <div className="border-b border-gray-800 px-6 py-4">
-        <h2 className="text-lg font-semibold text-gray-200">
-          TV Series Collection
-        </h2>
-        <p className="text-sm text-gray-400">Total: {tvSeries.length} series</p>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-100 font-primary">
+            TV Series Collection
+          </h2>
+          <p className="text-sm text-gray-400 mt-1">
+            Browse and manage {tvSeries.length} series on the platform
+          </p>
+        </div>
       </div>
 
-      <div className="overflow-x-auto max-h-[70vh] overflow-y-auto">
-        <table className="w-full text-sm">
-          <thead className="sticky top-0 bg-black z-10">
-            <tr className="border-b border-gray-800 text-gray-400 uppercase text-xs">
-              <th className="px-3 py-3">Poster</th>
-              <th className="px-3 py-3 text-left">Title</th>
-              <th className="px-3 py-3">Year</th>
-              <th className="px-3 py-3">Language</th>
-              <th className="px-3 py-3">Rating</th>
-              <th className="px-3 py-3">Age</th>
-              <th className="px-3 py-3">Country</th>
-              <th className="px-3 py-3">Description</th>
-              <th className="px-3 py-3">Banner</th>
-              <th className="px-3 py-3">Trailer</th>
-              {/* <th className="px-3 py-3">Movie URL</th> */}
-              <th className="px-3 py-3">Actions</th>
-            </tr>
-          </thead>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+        {tvSeries.map((tvShow, index) => (
+          <div
+            key={index}
+            className="group relative bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-1"
+          >
+            {/* Poster / Banner Container */}
+            <div className="relative aspect-[2/3] overflow-hidden">
+              <img
+                src={
+                  tvShow.Banner
+                    ? `data:image/jpeg;base64,${tvShow.Banner}`
+                    : "/placeholder.png"
+                }
+                alt={tvShow.Title}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
 
-          <tbody className="divide-y divide-gray-900">
-            {tvSeries.map((tvShow, index) => (
-              <tr key={index} className="hover:bg-gray-900 transition">
-                <td className="px-3 py-2">
-                  <img
-                    src={
-                      tvShow.Banner
-                        ? `data:image/jpeg;base64,${tvShow.Banner}`
-                        : "/placeholder.png"
+              {/* Top actions - visible on hover */}
+              <div className="absolute top-3 right-3 flex flex-col gap-2 translate-x-12 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300">
+                <button
+                  onClick={() => openUpdateModal(tvShow)}
+                  className="p-2 bg-white/10 backdrop-blur-md hover:bg-white/20 rounded-full text-blue-400 border border-white/10 transition-colors"
+                  title="Edit Series"
+                >
+                  <Pencil size={16} />
+                </button>
+                <button
+                  onClick={() => {
+                    if (confirm(`Are you sure you want to delete "${tvShow.Title}"?`)) {
+                      dispatch(deleteTvSeries(tvShow.ID || tvShow.id));
                     }
-                    alt={tvShow.Title}
-                    className="w-10 h-10 object-cover rounded-4xl border border-gray-700"
-                  />
-                </td>
-                <td className="px-3 py-2 text-gray-200 font-medium">
+                  }}
+                  className="p-2 bg-white/10 backdrop-blur-md hover:bg-white/20 rounded-full text-rose-400 border border-white/10 transition-colors"
+                  title="Delete Series"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+
+              {/* Rating badge */}
+              <div className="absolute top-3 left-3 px-2 py-1 bg-black/60 backdrop-blur-md rounded-lg text-amber-400 text-[10px] font-bold border border-white/10 flex items-center gap-1">
+                ⭐ {tvShow.Rating}
+              </div>
+
+              {/* Genre badge at bottom of image */}
+              <div className="absolute bottom-3 left-3 flex flex-wrap gap-1">
+                {tvShow.Genre && tvShow.Genre.split(',').map((g: string, i: number) => (
+                  <span key={i} className="px-2 py-0.5 bg-indigo-600/80 backdrop-blur-md rounded text-[9px] font-medium text-white border border-indigo-400/30">
+                    {g.trim()}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Content Info */}
+            <div className="p-4 space-y-3">
+              <div className="flex items-start justify-between gap-2">
+                <h3 className="text-sm font-bold text-gray-100 truncate flex-1" title={tvShow.Title}>
                   {tvShow.Title}
-                </td>
-                <td className="px-3 py-2 text-center">{tvShow.ReleaseYear}</td>
-                <td className="px-3 py-2 text-center">
-                  {tvShow.Language || "—"}
-                </td>
-                <td className="px-3 py-2 text-center">⭐ {tvShow.Rating}</td>
-                <td className="px-3 py-2 text-center">{tvShow.AgeRating}+</td>
-                <td className="px-3 py-2 text-center">{tvShow.Country}</td>
-                <td className="px-3 py-2 max-w-[200px] truncate text-gray-300">
-                  {tvShow.Description}
-                </td>
-                <td className="px-3 py-2 text-center">
-                  {tvShow.Banner ? "✔️" : "—"}
-                </td>
-                <td className="px-3 py-2 text-center">
-                  {tvShow.Trailer ? "✔️" : "—"}
-                </td>
-                {/* <td className="px-3 py-2 text-center">
-                  <a
-                    href={tvShow.MovieURL}
-                    target="_blank"
-                    className="text-blue-400 hover:underline"
-                  >
-                    Play
-                  </a>
-                </td> */}
-                <td className="px-3 py-2">
-                  <div className="flex justify-center gap-3">
-                    <button
-                      title="Edit"
-                      onClick={() => openUpdateModal(tvShow)}
-                      className="hover:scale-110 transition"
-                    >
-                      <Pencil
-                        className="text-blue-500 hover:text-blue-700"
-                        size={18}
-                      />
-                    </button>
-                    <button
-                      title="Delete"
-                      onClick={() => {
-                        if (
-                          confirm(
-                            `Are you sure you want to delete "${tvShow.Title}"?`
-                          )
-                        ) {
-                          dispatch(deleteTvSeries(tvShow.ID));
-                        }
-                      }}
-                      className="hover:scale-110 transition"
-                    >
-                      <Trash2
-                        className="text-red-500 hover:text-red-700"
-                        size={18}
-                      />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-            {tvSeries.length === 0 && (
-              <tr>
-                <td colSpan={13} className="py-12 text-center text-gray-500">
-                  🎬 No TV series found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+                </h3>
+                <span className="text-[10px] bg-zinc-800 text-zinc-400 px-1.5 py-0.5 rounded border border-zinc-700">
+                  {tvShow.ReleaseYear}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-y-2 text-[10px] text-zinc-400">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-zinc-500 uppercase font-semibold">Seasons:</span>
+                  <span>{tvShow.SeasonCount || 0}</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-zinc-500 uppercase font-semibold">Age:</span>
+                  <span>{tvShow.AgeRating}+</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-zinc-500 uppercase font-semibold">Lang:</span>
+                  <span className="truncate">{tvShow.Language || 'N/A'}</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-zinc-500 uppercase font-semibold">Origin:</span>
+                  <span className="truncate">{tvShow.Country}</span>
+                </div>
+              </div>
+
+              <p className="text-[11px] text-zinc-500 line-clamp-2 leading-relaxed h-8 border-t border-zinc-800 pt-2">
+                {tvShow.Description}
+              </p>
+            </div>
+          </div>
+        ))}
+
+        {tvSeries.length === 0 && (
+          <div className="col-span-full py-20 flex flex-col items-center justify-center text-zinc-500 border-2 border-dashed border-zinc-800 rounded-3xl">
+            <span className="text-4xl mb-4 text-zinc-700">🎬</span>
+            <p className="font-medium">No TV series found in your collection</p>
+            <p className="text-sm opacity-60 mt-1">Start by adding your favorite shows</p>
+          </div>
+        )}
       </div>
 
       <Modal open={isOpen} onClose={closeModal}>
-        {/* ✅ Pass dispatch to TvSeriesForm */}
         <TvSeriesForm
           series={selectedTvSeries}
           onClose={() => {
             closeModal();
-            dispatch(getAllTvSeries()); // refresh list after create/update
+            dispatch(getAllTvSeries());
           }}
         />
       </Modal>
