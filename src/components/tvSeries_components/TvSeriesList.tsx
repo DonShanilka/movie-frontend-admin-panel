@@ -9,11 +9,13 @@ import TvSeriesForm from "./TvSeriesForm";
 
 export default function TvSeriesList() {
   const dispatch = useAppDispatch();
-  const { tvSeries, loading, error } = useAppSelector((state) => state.tvSeries);
+  const { tvSeries, loading, error, searchTerm } = useAppSelector((state) => state.tvSeries);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTvSeries, setSelectedTvSeries] = useState<any>(null);
 
-  tvSeries.map((tvShow) => console.log(tvShow));
+  const filteredTvSeries = tvSeries.filter((series: any) =>
+    series.Title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const openUpdateModal = (tvSeries: any) => {
     setSelectedTvSeries(tvSeries);
@@ -41,13 +43,13 @@ export default function TvSeriesList() {
             TV Series Collection
           </h2>
           <p className="text-sm text-gray-400 mt-1">
-            Browse and manage {tvSeries.length} series on the platform
+            Displaying {filteredTvSeries.length} of {tvSeries.length} series
           </p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
-        {tvSeries.map((tvShow, index) => (
+        {filteredTvSeries.map((tvShow, index) => (
           <div
             key={index}
             className="group relative bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-1"
@@ -138,11 +140,11 @@ export default function TvSeriesList() {
           </div>
         ))}
 
-        {tvSeries.length === 0 && (
+        {filteredTvSeries.length === 0 && (
           <div className="col-span-full py-20 flex flex-col items-center justify-center text-zinc-500 border-2 border-dashed border-zinc-800 rounded-3xl">
             <span className="text-4xl mb-4 text-zinc-700">🎬</span>
-            <p className="font-medium">No TV series found in your collection</p>
-            <p className="text-sm opacity-60 mt-1">Start by adding your favorite shows</p>
+            <p className="font-medium">No TV series found matching "{searchTerm}"</p>
+            <p className="text-sm opacity-60 mt-1">Try a different search term or add a new series</p>
           </div>
         )}
       </div>

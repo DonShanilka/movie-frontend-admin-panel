@@ -9,11 +9,13 @@ import EpisodeForm from "./EpisodeForm";
 
 export default function EpisodeList() {
   const dispatch = useAppDispatch();
-  const { episodes, loading, error } = useAppSelector((state) => state.episode);
+  const { episodes, loading, error, searchTerm } = useAppSelector((state) => state.episode);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedEpisode, setSelectedEpisode] = useState<any>(null);
 
-  episodes.map((episode) => console.log(episode));
+  const filteredEpisodes = episodes.filter((episode: any) =>
+    episode.Title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const openUpdateModal = (episode: any) => {
     setSelectedEpisode(episode);
@@ -39,7 +41,9 @@ export default function EpisodeList() {
         <h2 className="text-lg font-semibold text-gray-200">
           Episode Collection
         </h2>
-        <p className="text-sm text-gray-400">Total: {episodes.length} episodes</p>
+        <p className="text-sm text-gray-400">
+          Showing {filteredEpisodes.length} of {episodes.length} episodes
+        </p>
       </div>
 
       <div className="overflow-x-auto max-h-[70vh] overflow-y-auto">
@@ -58,7 +62,7 @@ export default function EpisodeList() {
           </thead>
 
           <tbody className="divide-y divide-gray-900">
-            {episodes.map((episode, index) => (
+            {filteredEpisodes.map((episode, index) => (
               <tr key={index} className="hover:bg-gray-900 transition">
                 <td className="px-3 py-2 text-gray-200 font-medium">
                   {episode.Title}
@@ -115,10 +119,10 @@ export default function EpisodeList() {
                 </td>
               </tr>
             ))}
-            {episodes.length === 0 && (
+            {filteredEpisodes.length === 0 && (
               <tr>
                 <td colSpan={13} className="py-12 text-center text-gray-500">
-                  🎬 No episodes found
+                  🎬 No episodes found matching "{searchTerm}"
                 </td>
               </tr>
             )}

@@ -69,12 +69,16 @@ const tvSeriesSlice = createSlice({
     loading: false,
     success: false,
     error: null as string | null,
+    searchTerm: "",
   },
   reducers: {
     resetTvSeriesState: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
+    },
+    setSearchTerm: (state, action) => {
+      state.searchTerm = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -123,5 +127,5 @@ const tvSeriesSlice = createSlice({
   },
 });
 
-export const { resetTvSeriesState } = tvSeriesSlice.actions;
+export const { resetTvSeriesState, setSearchTerm } = tvSeriesSlice.actions;
 export default tvSeriesSlice.reducer;

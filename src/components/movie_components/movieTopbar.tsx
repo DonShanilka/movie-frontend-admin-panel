@@ -1,13 +1,17 @@
 "use client";
 
-import { Search, Filter, Upload } from "lucide-react";
+import { Search, Upload } from "lucide-react";
 import Modal from "../UI/Modal";
 import MovieForm from "./MovieForm";
 import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { setSearchTerm } from "@/redux/slices/movieSlice";
 
-export default function TvSeriesTopbar() {
+export default function MovieTopbar() {
+  const dispatch = useAppDispatch();
+  const searchTerm = useAppSelector((state) => state.movies.searchTerm);
 
-  const [open, setOpen] =  useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="w-full flex flex-col md:flex-row items-center justify-between gap-2 bg-gray-950 p-1 rounded-lg shadow-md border border-gray-950">
@@ -17,8 +21,10 @@ export default function TvSeriesTopbar() {
         <Search className="text-gray-600 w-5 h-5 " />
         <input
           type="text"
-          placeholder="Search series..."
-          className="w-full bg-transparent outline-none text-gray-500 ml-2"
+          placeholder="Search movies..."
+          value={searchTerm}
+          onChange={(e) => dispatch(setSearchTerm(e.target.value))}
+          className="w-full bg-transparent outline-none text-gray-200 ml-2"
         />
       </div>
 
@@ -36,21 +42,21 @@ export default function TvSeriesTopbar() {
         {/* Upload Movie Button */}
         <div className="pl-[280px] p-6">
 
-      {/* Upload Button */}
-      <button
-        onClick={() => setOpen(true)}
-        className="flex items-center gap-2 bg-yellow-300 hover:bg-yellow-400 text-black px-2 py-2 rounded-4xl shadow-md transition"
-      >
-        <Upload className="w-4 h-4 ml-1" />
-        <span className="text-sm font-medium pr-2">Upload</span>
-      </button>
+          {/* Upload Button */}
+          <button
+            onClick={() => setOpen(true)}
+            className="flex items-center gap-2 bg-yellow-300 hover:bg-yellow-400 text-black px-2 py-2 rounded-4xl shadow-md transition"
+          >
+            <Upload className="w-4 h-4 ml-1" />
+            <span className="text-sm font-medium pr-2">Upload</span>
+          </button>
 
-      {/* Popup Modal */}
-      <Modal open={open} onClose={() => setOpen(false)}>
-        <MovieForm onClose={() => setOpen(false)} />
-      </Modal>
+          {/* Popup Modal */}
+          <Modal open={open} onClose={() => setOpen(false)}>
+            <MovieForm onClose={() => setOpen(false)} />
+          </Modal>
 
-    </div>
+        </div>
       </div>
     </div>
   );

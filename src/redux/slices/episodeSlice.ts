@@ -69,12 +69,16 @@ const episodeSlice = createSlice({
     loading: false,
     success: false,
     error: null as string | null,
+    searchTerm: "",
   },
   reducers: {
     resetEpisodeState: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
+    },
+    setSearchTerm: (state, action) => {
+      state.searchTerm = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -123,5 +127,5 @@ const episodeSlice = createSlice({
   },
 });
 
-export const { resetEpisodeState } = episodeSlice.actions;
+export const { resetEpisodeState, setSearchTerm } = episodeSlice.actions;
 export default episodeSlice.reducer;

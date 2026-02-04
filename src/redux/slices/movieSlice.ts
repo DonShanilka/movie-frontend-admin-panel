@@ -73,12 +73,16 @@ const movieSlice = createSlice({
     loading: false,
     success: false,
     error: null as string | null,
+    searchTerm: "",
   },
   reducers: {
     resetMovieState: (state) => {
       state.loading = false;
       state.success = false;
       state.error = null;
+    },
+    setSearchTerm: (state, action) => {
+      state.searchTerm = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -127,5 +131,5 @@ const movieSlice = createSlice({
   },
 });
 
-export const { resetMovieState } = movieSlice.actions;
+export const { resetMovieState, setSearchTerm } = movieSlice.actions;
 export default movieSlice.reducer;

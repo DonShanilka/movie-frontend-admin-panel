@@ -9,9 +9,13 @@ import MovieForm from "./MovieForm";
 
 export default function MovieList() {
   const dispatch = useAppDispatch();
-  const { movies, loading, error } = useAppSelector((state) => state.movies);
+  const { movies, loading, error, searchTerm } = useAppSelector((state) => state.movies);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState<any>(null);
+
+  const filteredMovies = movies.filter((movie: any) =>
+    movie.Title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const openUpdateModal = (movie: any) => {
     setSelectedMovie(movie);
@@ -44,7 +48,7 @@ export default function MovieList() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
-        {movies.map((movie, index) => (
+        {filteredMovies.map((movie, index) => (
           <div
             key={index}
             className="group relative bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-1"
@@ -135,11 +139,11 @@ export default function MovieList() {
           </div>
         ))}
 
-        {movies.length === 0 && (
+        {filteredMovies.length === 0 && (
           <div className="col-span-full py-20 flex flex-col items-center justify-center text-zinc-500 border-2 border-dashed border-zinc-800 rounded-3xl">
             <span className="text-4xl mb-4 text-zinc-700">🎬</span>
-            <p className="font-medium">No movies found in your collection</p>
-            <p className="text-sm opacity-60 mt-1">Start by adding your favorite titles</p>
+            <p className="font-medium">No movies found matching "{searchTerm}"</p>
+            <p className="text-sm opacity-60 mt-1">Try a different search term or add a new movie</p>
           </div>
         )}
       </div>
