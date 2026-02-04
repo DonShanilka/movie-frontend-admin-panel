@@ -39,7 +39,7 @@ export default function TvSeriesList() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-100 font-primary">
+          <h2 className="text-2xl pt-4 font-bold text-gray-100 font-primary">
             TV Series Collection
           </h2>
           <p className="text-sm text-gray-400 mt-1">
