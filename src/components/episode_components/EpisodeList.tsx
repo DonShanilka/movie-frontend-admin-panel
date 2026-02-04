@@ -36,7 +36,7 @@ export default function EpisodeList() {
   if (error) return <div className="p-10 text-red-500">{error}</div>;
 
   return (
-    <div className="bg-black rounded-2xl border border-gray-800 overflow-hidden">
+    <div className="bg-black rounded-2xl mt-4 border border-gray-800 overflow-hidden">
       <div className="border-b border-gray-800 px-6 py-4">
         <h2 className="text-lg font-semibold text-gray-200">
           Episode Collection
