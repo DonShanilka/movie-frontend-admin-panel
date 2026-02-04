@@ -32,6 +32,7 @@ export default function DashboardPage() {
             icon={Film}
             trend="12%"
             trendUp={true}
+            iconColor="sky"
           />
           <StatCard
             title="TV Series"
@@ -39,6 +40,7 @@ export default function DashboardPage() {
             icon={Tv}
             trend="5%"
             trendUp={true}
+            iconColor="amber"
           />
           <StatCard
             title="Active Users"
@@ -46,6 +48,7 @@ export default function DashboardPage() {
             icon={Users}
             trend="18%"
             trendUp={true}
+            iconColor="rose"
           />
           <StatCard
             title="Monthly Revenue"
@@ -53,6 +56,7 @@ export default function DashboardPage() {
             icon={DollarSign}
             trend="8%"
             trendUp={true}
+            iconColor="emerald"
           />
         </div>
 

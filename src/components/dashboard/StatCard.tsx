@@ -7,9 +7,21 @@ interface StatCardProps {
     icon: LucideIcon;
     trend?: string;
     trendUp?: boolean;
+    iconColor?: string;
 }
 
-const StatCard: React.FC<StatCardProps> = ({ title, value, icon: Icon, trend, trendUp }) => {
+const StatCard: React.FC<StatCardProps> = ({ title, value, icon: Icon, trend, trendUp, iconColor = 'indigo' }) => {
+    // Map color names to Tailwind classes
+    const colorMap: Record<string, string> = {
+        indigo: 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400',
+        amber: 'bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400',
+        emerald: 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400',
+        rose: 'bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400',
+        sky: 'bg-sky-50 dark:bg-sky-900/30 text-sky-600 dark:text-sky-400',
+    };
+
+    const colorClasses = colorMap[iconColor] || colorMap.indigo;
+
     return (
         <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800 flex items-start justify-between transition-all hover:shadow-md">
             <div>
@@ -21,8 +33,8 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon: Icon, trend, tr
                     </p>
                 )}
             </div>
-            <div className="p-3 bg-indigo-50 dark:bg-indigo-900/30 rounded-xl">
-                <Icon className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+            <div className={`p-3 rounded-xl ${colorClasses.split(' ').slice(0, 2).join(' ')}`}>
+                <Icon className={`w-6 h-6 ${colorClasses.split(' ').slice(2).join(' ')}`} />
             </div>
         </div>
     );
